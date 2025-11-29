@@ -1,5 +1,5 @@
 import Colors from "@/shred/Colors";
-import { useAuth } from "@clerk/clerk-expo";
+import { useAuth, useUser } from "@clerk/clerk-expo";
 import { useCallback, useEffect } from "react";
 import { Dimensions, Image, Platform, Text, TouchableOpacity, View } from "react-native";
 
@@ -28,6 +28,9 @@ export default function Index() {
 
   const { isSignedIn } = useAuth()
   const router = useRouter();
+  const {user} = useUser();
+
+  console.log("User Email:", user?.primaryEmailAddress?.emailAddress);
 
   useEffect (() => {
     if (isSignedIn) {
