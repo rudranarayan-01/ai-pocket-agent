@@ -1,3 +1,4 @@
+import Colors from "@/shred/Colors";
 import { Dimensions, Image, Platform, Text, View } from "react-native";
 
 export default function Index() {
@@ -19,8 +20,21 @@ export default function Index() {
           fontWeight: "bold",
           textAlign: "center",
           marginTop: 10,
+          color: Colors.PRIMARY,
         }}>Welcome to AI Pocket Agent!</Text>
+        <Text style={{
+          fontSize: 20,
+          fontWeight: "500",
+          textAlign: "center",
+          marginTop: 10,
+          color: Colors.GRAY,
+        }}>Your personal AI assistant on the go. Try it today. Completely free.</Text>
       </View>
+
+      <View>
+        <Text>Get Started</Text>
+      </View>
+      
     </View>
   );
 }
