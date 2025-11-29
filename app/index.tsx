@@ -1,5 +1,5 @@
 import Colors from "@/shred/Colors";
-import { Dimensions, Image, Platform, Text, View } from "react-native";
+import { Dimensions, Image, Platform, Text, TouchableOpacity, View } from "react-native";
 
 export default function Index() {
   return (
@@ -31,10 +31,10 @@ export default function Index() {
         }}>Your personal AI assistant on the go. Try it today. Completely free.</Text>
       </View>
 
-      <View>
-        <Text>Get Started</Text>
-      </View>
-      
+      <TouchableOpacity style={{width:"100%", marginTop:16, padding:15, backgroundColor:Colors.PRIMARY, borderRadius:12, justifyContent:"center", alignItems:"center"}}>
+        <Text style={{color:Colors.WHITE, fontSize:24, textAlign:"center"}}>Get Started</Text>
+      </TouchableOpacity>
+
     </View>
   );
 }
