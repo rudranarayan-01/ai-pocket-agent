@@ -1,7 +1,7 @@
 import Colors from "@/shred/Colors";
 import { useAuth, useUser } from "@clerk/clerk-expo";
-import { useCallback, useEffect } from "react";
-import { Dimensions, Image, Platform, Text, TouchableOpacity, View } from "react-native";
+import { useCallback, useEffect, useState } from "react";
+import { ActivityIndicator, Dimensions, Image, Platform, Text, TouchableOpacity, View } from "react-native";
 
 // Clerk expo oAuth browser warm up
 import { useSSO } from '@clerk/clerk-expo';
@@ -29,14 +29,17 @@ export default function Index() {
   const { isSignedIn } = useAuth()
   const router = useRouter();
   const {user} = useUser();
+  const [loading, setLoading] =  useState(true);
+
 
   console.log("User Email:", user?.primaryEmailAddress?.emailAddress);
 
   useEffect (() => {
     if (isSignedIn) {
       console.log("User is signed in")
-    } else {
-      console.log("User is NOT signed in")
+    } 
+    if(isSignedIn != undefined){
+      setLoading(false);
     }
   }, [isSignedIn]);
 
@@ -110,9 +113,11 @@ export default function Index() {
         }}>Your personal AI assistant on the go. Try it today. Completely free.</Text>
       </View>
 
-      <TouchableOpacity onPress={onLoginPress} style={{width:"100%", marginTop:16, padding:15, backgroundColor:Colors.PRIMARY, borderRadius:12, justifyContent:"center", alignItems:"center"}}>
+      { !loading && <TouchableOpacity onPress={onLoginPress} style={{width:"100%", marginTop:16, padding:15, backgroundColor:Colors.PRIMARY, borderRadius:12, justifyContent:"center", alignItems:"center"}}>
         <Text style={{color:Colors.WHITE, fontSize:24, textAlign:"center"}}>Get Started</Text>
-      </TouchableOpacity>
+      </TouchableOpacity>}
+
+      { loading && <ActivityIndicator size="large" color={Colors.PRIMARY} style={{marginTop:16}} /> }
 
     </View>
   );
