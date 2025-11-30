@@ -4,10 +4,12 @@ import { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, Dimensions, Image, Platform, Text, TouchableOpacity, View } from "react-native";
 
 // Clerk expo oAuth browser warm up
+import { firestoreDb } from "@/config/firebase";
 import { useSSO } from '@clerk/clerk-expo';
 import * as AuthSession from 'expo-auth-session';
 import { useRouter } from "expo-router";
 import * as WebBrowser from 'expo-web-browser';
+import { doc, setDoc } from "firebase/firestore";
 
 export const useWarmUpBrowser = () => {
   useEffect(() => {
@@ -57,6 +59,17 @@ export default function Index() {
         strategy: 'oauth_google',
         redirectUrl: AuthSession.makeRedirectUri(),
       })
+
+      if (signUp) {
+        await setDoc(doc(firestoreDb, 'users', signUp.emailAddress??''),{
+          email: signUp.emailAddress,
+          name: signUp.firstName + " " + signUp.lastName,
+          userId: signUp.id,
+          joinDate: Date.now(),
+          credits:20
+        })
+      }
+
       if (createdSessionId) {
         setActive!({
           session: createdSessionId,
