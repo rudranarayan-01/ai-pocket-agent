@@ -60,6 +60,7 @@ export default function Index() {
         redirectUrl: AuthSession.makeRedirectUri(),
       })
 
+      // saving user data to firestore while signing up
       if (signUp) {
         await setDoc(doc(firestoreDb, 'users', signUp.emailAddress??''),{
           email: signUp.emailAddress,
