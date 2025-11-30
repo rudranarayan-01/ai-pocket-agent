@@ -38,7 +38,7 @@ export default function Index() {
 
   useEffect (() => {
     if (isSignedIn) {
-      console.log("User is signed in")
+      router.replace("/(tabs)/Home");
     } 
     if(isSignedIn != undefined){
       setLoading(false);
