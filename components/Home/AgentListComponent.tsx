@@ -6,7 +6,9 @@ import AgentCard from './AgentCard'
 export default function AgentListComponent() {
     return (
         <View>
-            <FlatList data={Agents} renderItem={({item, index})=>(
+            <FlatList data={Agents} 
+            // @ts-ignore
+            renderItem={({item, index})=> item.featured && (
                 <AgentCard agent={item} key={index} />
             )}>
 

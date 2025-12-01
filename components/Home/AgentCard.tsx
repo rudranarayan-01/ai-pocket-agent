@@ -1,5 +1,5 @@
 import React from 'react'
-import { View } from 'react-native'
+import { Text, View } from 'react-native'
 
 type Props = {
     agent : Agent
@@ -19,7 +19,7 @@ type Agent = {
 export default function AgentCard({agent}: Props) {
     return (
         <View>
-            
+            <Text>Agent card</Text>
         </View>
     )
 }
