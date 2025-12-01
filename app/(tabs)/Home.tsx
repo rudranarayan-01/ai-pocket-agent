@@ -1,3 +1,4 @@
+import AgentListComponent from '@/components/Home/AgentListComponent';
 import Colors from '@/shred/Colors';
 import { useNavigation } from 'expo-router';
 import { Settings } from 'lucide-react-native';
@@ -24,8 +25,8 @@ export default function Home() {
     });
     })
     return (
-        <View>
-            <Text>Home</Text>
+        <View style={{padding:15}}>
+            <AgentListComponent/>
         </View>
     )
 }

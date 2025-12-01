@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
-import { getAnalytics } from "firebase/analytics";
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import { Platform } from "react-native";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -19,6 +19,13 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+export async function initAnalyticsIfWeb() {
+    if (Platform.OS !== "web") return null;                // bail on native
+    if (typeof document === "undefined") return null;      // extra safety
+    // dynamic import so bundlers don't execute web-only code on native
+    const analyticsModule = await import("firebase/analytics");
+    const { getAnalytics } = analyticsModule;
+    return getAnalytics(app);
+}
 
 export const firestoreDb = getFirestore(app);
