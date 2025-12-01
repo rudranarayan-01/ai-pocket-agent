@@ -6,11 +6,14 @@ import AgentCard from './AgentCard'
 export default function AgentListComponent() {
     return (
         <View>
-            <FlatList data={Agents} 
-            // @ts-ignore
-            renderItem={({item, index})=> item.featured && (
-                <AgentCard agent={item} key={index} />
-            )}>
+            <FlatList data={Agents}
+                numColumns={2}
+                // @ts-ignore
+                renderItem={({ item, index }) => item.featured && (
+                    <View style={{flex:1, padding:5}}>
+                        <AgentCard agent={item} key={index} />
+                    </View>
+                )}>
 
             </FlatList>
         </View>
