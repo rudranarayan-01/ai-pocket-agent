@@ -1,5 +1,6 @@
 import AgentListComponent from '@/components/Home/AgentListComponent';
 import CreateAgentBanner from '@/components/Home/CreateAgentBanner';
+import NonFeaturedAgentCard from '@/components/Home/NonFeaturedAgentCard';
 import Colors from '@/shred/Colors';
 import { useNavigation } from 'expo-router';
 import { Settings } from 'lucide-react-native';
@@ -31,7 +32,7 @@ export default function Home() {
                 <View style={{ padding: 15 }}>
                     <AgentListComponent isFeatured={true}/>
                     <CreateAgentBanner />
-                    
+                    <NonFeaturedAgentCard/>
                 </View>
             }>
         </FlatList>

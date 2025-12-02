@@ -6,7 +6,7 @@ type Props = {
     agent: Agent
 }
 
-type Agent = {
+export type Agent = {
     id: number,
     name: string,
     desc: string,
