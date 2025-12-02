@@ -31,7 +31,7 @@ export default function Home() {
                 <View style={{ padding: 15 }}>
                     <AgentListComponent isFeatured={true}/>
                     <CreateAgentBanner />
-                    <AgentListComponent isFeatured={false}/>
+                    
                 </View>
             }>
         </FlatList>
