@@ -1,4 +1,5 @@
 import AgentListComponent from '@/components/Home/AgentListComponent';
+import CreateAgentBanner from '@/components/Home/CreateAgentBanner';
 import Colors from '@/shred/Colors';
 import { useNavigation } from 'expo-router';
 import { Settings } from 'lucide-react-native';
@@ -27,6 +28,7 @@ export default function Home() {
     return (
         <View style={{padding:15}}>
             <AgentListComponent/>
+            <CreateAgentBanner/>
         </View>
     )
 }
