@@ -27,8 +27,9 @@ export default function Home() {
     })
     return (
         <View style={{padding:15}}>
-            <AgentListComponent/>
+            <AgentListComponent isFeaturd={true}/>
             <CreateAgentBanner/>
+            <AgentListComponent isFeaturd={false}/>
         </View>
     )
 }
