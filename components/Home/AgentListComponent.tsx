@@ -3,19 +3,23 @@ import React from 'react'
 import { FlatList, View } from 'react-native'
 import AgentCard from './AgentCard'
 
-export default function AgentListComponent({isFeaturd}:any) {
+export default function AgentListComponent({ isFeatured }: any) {
+
+    const filteredAgents = Agents.filter(agent =>
+        isFeatured ? agent.featured === true : agent.featured !== true
+    )
+
     return (
         <View>
-            <FlatList data={Agents}
+            <FlatList
+                data={filteredAgents}
                 numColumns={2}
-                // @ts-ignore
-                renderItem={({ item, index }) => item.featured = isFeaturd && (
-                    <View style={{flex:1, padding:5}}>
+                renderItem={({ item, index }) => (
+                    <View style={{ flex: 1, padding: 5 }}>
                         <AgentCard agent={item} key={index} />
                     </View>
-                )}>
-
-            </FlatList>
+                )}
+            />
         </View>
     )
 }

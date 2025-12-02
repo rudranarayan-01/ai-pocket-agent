@@ -40,85 +40,85 @@ export const Agents = [
         type: 'chat',
         featured: true
     },
-    // {
-    //     id: 5,
-    //     name: 'Math Solver',
-    //     desc: 'Solve and explain math problems.',
-    //     image: require('./../assets/images/agents/agent_5.png'),
-    //     initialText: 'Solve: 2x + 5 = 15.',
-    //     prompt: 'You are a math assistant. Solve problems and explain step by step.',
-    //     type: 'image+text',
-    //     featured: false
-    // },
-    // {
-    //     id: 6,
-    //     name: 'Caption Generator',
-    //     desc: 'Create captions for social media.',
-    //     image: require('./../assets/images/agents/agent_6.png'),
-    //     initialText: 'A picture of a puppy playing in the park.',
-    //     prompt: 'You are a caption generator. Create short, catchy captions with hashtags.',
-    //     type: 'image+text',
-    //     featured: false
-    // },
-    // {
-    //     id: 7,
-    //     name: 'Grammar Fixer',
-    //     desc: 'Fix grammar and spelling errors.',
-    //     image: require('./../assets/images/agents/agent_7.png'),
-    //     initialText: 'I going to office yesterday.',
-    //     prompt: 'You are a grammar assistant. Correct grammar and spelling without changing meaning.',
-    //     type: 'chat',
-    //     featured: false
-    // },
-    // {
-    //     id: 8,
-    //     name: 'Fitness Coach',
-    //     desc: 'Get workouts and diet tips.',
-    //     image: require('./../assets/images/agents/agent_8.png'),
-    //     initialText: 'Create a 4-day workout plan for weight loss.',
-    //     prompt: 'You are a fitness assistant. Suggest workouts and meal plans.',
-    //     type: 'chat',
-    //     featured: false
-    // },
-    // {
-    //     id: 9,
-    //     name: 'Code Assistant',
-    //     desc: 'Write and debug code.',
-    //     image: require('./../assets/images/agents/agent_9.png'),
-    //     initialText: 'Write a Python function to check if a number is prime.',
-    //     prompt: 'You are a coding assistant. Generate and explain code.',
-    //     type: 'chat',
-    //     featured: false
-    // },
-    // {
-    //     id: 10,
-    //     name: 'Research Assistant',
-    //     desc: 'Summarize and organize information.',
-    //     image: require('./../assets/images/agents/agent_10.png'),
-    //     initialText: 'Summarize key points from an article about climate change.',
-    //     prompt: 'You are a research assistant. Summarize and simplify information.',
-    //     type: 'chat',
-    //     featured: false
-    // },
-    // {
-    //     id: 11,
-    //     name: 'Storyteller',
-    //     desc: 'Create stories or poems.',
-    //     image: require('./../assets/images/agents/agent_11.png'),
-    //     initialText: 'Tell a short bedtime story about a dragon and a princess.',
-    //     prompt: 'You are a storyteller. Write imaginative stories for kids and adults.',
-    //     type: 'chat',
-    //     featured: false
-    // },
-    // {
-    //     id: 12,
-    //     name: 'Email Generator',
-    //     desc: 'Draft professional emails.',
-    //     image: require('./../assets/images/agents/agent_12.png'),
-    //     initialText: 'Write a professional email to a client about project updates.',
-    //     prompt: 'You are an email assistant. Write clear, concise emails.',
-    //     type: 'chat',
-    //     featured: false
-    // }
+    {
+        id: 5,
+        name: 'Math Solver',
+        desc: 'Solve and explain math problems.',
+        image: require('./../assets/images/agents/agent_1.png'),
+        initialText: 'Solve: 2x + 5 = 15.',
+        prompt: 'You are a math assistant. Solve problems and explain step by step.',
+        type: 'image+text',
+        featured: false
+    },
+    {
+        id: 6,
+        name: 'Caption Generator',
+        desc: 'Create captions for social media.',
+        image: require('./../assets/images/agents/agent_2.png'),
+        initialText: 'A picture of a puppy playing in the park.',
+        prompt: 'You are a caption generator. Create short, catchy captions with hashtags.',
+        type: 'image+text',
+        featured: false
+    },
+    {
+        id: 7,
+        name: 'Grammar Fixer',
+        desc: 'Fix grammar and spelling errors.',
+        image: require('./../assets/images/agents/agent_3.png'),
+        initialText: 'I going to office yesterday.',
+        prompt: 'You are a grammar assistant. Correct grammar and spelling without changing meaning.',
+        type: 'chat',
+        featured: false
+    },
+    {
+        id: 8,
+        name: 'Fitness Coach',
+        desc: 'Get workouts and diet tips.',
+        image: require('./../assets/images/agents/agent_4.png'),
+        initialText: 'Create a 4-day workout plan for weight loss.',
+        prompt: 'You are a fitness assistant. Suggest workouts and meal plans.',
+        type: 'chat',
+        featured: false
+    },
+    {
+        id: 9,
+        name: 'Code Assistant',
+        desc: 'Write and debug code.',
+        image: require('./../assets/images/agents/agent_1.png'),
+        initialText: 'Write a Python function to check if a number is prime.',
+        prompt: 'You are a coding assistant. Generate and explain code.',
+        type: 'chat',
+        featured: false
+    },
+    {
+        id: 10,
+        name: 'Research Assistant',
+        desc: 'Summarize and organize information.',
+        image: require('./../assets/images/agents/agent_2.png'),
+        initialText: 'Summarize key points from an article about climate change.',
+        prompt: 'You are a research assistant. Summarize and simplify information.',
+        type: 'chat',
+        featured: false
+    },
+    {
+        id: 11,
+        name: 'Storyteller',
+        desc: 'Create stories or poems.',
+        image: require('./../assets/images/agents/agent_3.png'),
+        initialText: 'Tell a short bedtime story about a dragon and a princess.',
+        prompt: 'You are a storyteller. Write imaginative stories for kids and adults.',
+        type: 'chat',
+        featured: false
+    },
+    {
+        id: 12,
+        name: 'Email Generator',
+        desc: 'Draft professional emails.',
+        image: require('./../assets/images/agents/agent_4.png'),
+        initialText: 'Write a professional email to a client about project updates.',
+        prompt: 'You are an email assistant. Write clear, concise emails.',
+        type: 'chat',
+        featured: false
+    }
 ];
 
