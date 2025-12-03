@@ -1,6 +1,7 @@
 import Colors from '@/shred/Colors'
+import { router } from 'expo-router'
 import React from 'react'
-import { Image, Text, View } from 'react-native'
+import { Image, Text, TouchableOpacity, View } from 'react-native'
 import { Agent } from './AgentCard'
 
 type Props = {
@@ -9,7 +10,16 @@ type Props = {
 
 export default function NonFeaturedAgentCard({ agent }: Props) {
     return (
-        <View style={{ padding: 15, minHeight: 180, backgroundColor: Colors.WHITE, borderRadius: 10, shadowColor: Colors.BLACK, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 10, elevation: 6, overflow: 'hidden' }}>
+        <TouchableOpacity style={{ padding: 15, minHeight: 180, backgroundColor: Colors.WHITE, borderRadius: 10, shadowColor: Colors.BLACK, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 10, elevation: 6, overflow: 'hidden' }}
+        onPress={() => router.push({
+                pathname: '/chat',
+                params: {
+                    agentName: agent.name,
+                    agentPrompt: agent.prompt,
+                    agentInitialText: agent.initialText,
+                    agentId: agent.id
+                }
+            })}>
             <View>
                 {/* @ts-ignore */}
                 <Image source={agent.image} style={{ width: 80, height: 80, resizeMode: 'contain', marginTop: 10 }} />
@@ -18,6 +28,6 @@ export default function NonFeaturedAgentCard({ agent }: Props) {
                 <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{agent.name}</Text>
                 <Text numberOfLines={2} style={{ color: Colors.GRAY, marginTop: 2 }}>{agent.desc}</Text>
             </View>
-        </View>
+        </TouchableOpacity>
     )
 }
