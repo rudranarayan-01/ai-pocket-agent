@@ -1,6 +1,7 @@
 import { Agents } from '@/shred/AgentList'
+import { router } from 'expo-router'
 import React from 'react'
-import { FlatList, View } from 'react-native'
+import { FlatList, TouchableOpacity, View } from 'react-native'
 import AgentCard from './AgentCard'
 
 export default function AgentListComponent({ isFeatured }: any) {
@@ -15,9 +16,19 @@ export default function AgentListComponent({ isFeatured }: any) {
                 data={filteredAgents}
                 numColumns={2}
                 renderItem={({ item, index }) => (
-                    <View style={{ flex: 1, padding: 5 }}>
+                    <TouchableOpacity
+                        onPress={() => router.push({
+                            pathname: '/chat',
+                            params: {
+                                agentName: item.name,
+                                agentPrompt: item.prompt,
+                                agentInitialText: item.initialText,
+                                agentId: item.id
+                            }
+                        })}
+                        style={{ flex: 1, padding: 5 }}>
                         <AgentCard agent={item} key={index} />
-                    </View>
+                    </TouchableOpacity>
                 )}
             />
         </View>

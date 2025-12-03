@@ -2,15 +2,17 @@
 import { ClerkProvider } from "@clerk/clerk-expo";
 import { tokenCache } from "@clerk/clerk-expo/token-cache";
 import { Stack } from "expo-router";
+import { useState } from "react";
 import { StatusBar } from "react-native";
 
 export default function RootLayout() {
+  const [theme, setTheme] = useState("light");
   return (
     <>
       <StatusBar
-        barStyle="dark-content"          // dark text/icons
-        backgroundColor="transparent"    // transparent background
-        translucent={false}              // avoid content drawing under the status bar
+        barStyle={theme === "dark" ? "light-content" : "dark-content"}
+        backgroundColor="transparent"
+        translucent={false}
       />
       <ClerkProvider tokenCache={tokenCache}>
         <Stack screenOptions={{ headerShown: false }}>

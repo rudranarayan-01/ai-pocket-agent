@@ -1,6 +1,7 @@
 import { Agents } from '@/shred/AgentList'
+import { router } from 'expo-router'
 import React from 'react'
-import { FlatList, View } from 'react-native'
+import { FlatList, TouchableOpacity, View } from 'react-native'
 import NonFeaturedAgentCard from './NonFeaturedAgentCard'
 
 export default function NonFeaturedAgentList({ isFeatured }: any) {
@@ -13,9 +14,18 @@ export default function NonFeaturedAgentList({ isFeatured }: any) {
                 data={filteredAgents}
                 numColumns={2}
                 renderItem={({ item, index }) => (
-                    <View style={{ flex: 1, padding: 5 }}>
+                    <TouchableOpacity onPress={() => router.push({
+                                    pathname: '/chat',
+                                    params: {
+                                        agentName: item.name,
+                                        agentPrompt: item.prompt,
+                                        agentInitialText: item.initialText,
+                                        agentId: item.id
+                                    }
+                                })}
+                                style={{ flex: 1, padding: 5 }}>
                         <NonFeaturedAgentCard agent={item} key={index} />
-                    </View>
+                    </TouchableOpacity>
                 )}
             />
         </View>
