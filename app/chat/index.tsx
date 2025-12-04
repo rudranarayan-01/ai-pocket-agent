@@ -26,10 +26,10 @@ export default function ChatUI() {
     })
 
     return (
-        <View>
+        <View style={{ flex: 1, backgroundColor: Colors.WHITE, padding: 10 }}>
             <FlatList data={messages} renderItem={({ item, index }) => (
                 <View style={[styles.messageContainer, item.role === 'assistant' ? styles.assistantMessage : styles.userMessage]} >
-                    <Text>{item.role}: {item.content}</Text>
+                    <Text style={[styles.messageText, item.role === 'user' ? styles.userText : styles.assistantText]}>{item.content}</Text>
                 </View>
             )}>
 
@@ -43,7 +43,6 @@ const styles = StyleSheet.create({
         maxWidth: '75%',
         marginVertical: 4,
         padding: 10,
-        margin:10,
         borderRadius: 12,
     },
     assistantMessage: {
@@ -57,5 +56,8 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.PRIMARY,
         alignSelf: 'flex-end',
         borderBottomRightRadius:2,
-    }
+    },
+    userText:{color:Colors.WHITE},
+    messageText:{fontSize:16},
+    assistantText:{color:Colors.BLACK}
 });
