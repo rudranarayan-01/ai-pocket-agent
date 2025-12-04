@@ -2,9 +2,31 @@ import Colors from '@/shred/Colors';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
 import { Camera, Plus, Send } from 'lucide-react-native';
 import React, { useEffect } from 'react';
-import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { FlatList, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 const initialMessages = [
+    { role: 'user', content: 'Hello, who are you?' },
+    { role: 'assistant', content: 'I am good, what about you ?' },
+    { role: 'user', content: 'Hello, who are you?' },
+    { role: 'assistant', content: 'I am good, what about you ?' },
+    { role: 'user', content: 'Hello, who are you?' },
+    { role: 'assistant', content: 'I am good, what about you ?' },
+    { role: 'user', content: 'Hello, who are you?' },
+    { role: 'assistant', content: 'I am good, what about you ?' },
+    { role: 'user', content: 'Hello, who are you?' },
+    { role: 'assistant', content: 'I am good, what about you ?' },
+    { role: 'user', content: 'Hello, who are you?' },
+    { role: 'assistant', content: 'I am good, what about you ?' },
+    { role: 'user', content: 'Hello, who are you?' },
+    { role: 'assistant', content: 'I am good, what about you ?' },
+    { role: 'user', content: 'Hello, who are you?' },
+    { role: 'assistant', content: 'I am good, what about you ?' },
+    { role: 'user', content: 'Hello, who are you?' },
+    { role: 'assistant', content: 'I am good, what about you ?' },
+    { role: 'user', content: 'Hello, who are you?' },
+    { role: 'assistant', content: 'I am good, what about you ?' },
+    { role: 'user', content: 'Hello, who are you?' },
+    { role: 'assistant', content: 'I am good, what about you ?' },
     { role: 'user', content: 'Hello, who are you?' },
     { role: 'assistant', content: 'I am good, what about you ?' },
 ]
@@ -26,7 +48,7 @@ export default function ChatUI() {
     })
 
     return (
-        <View style={{ flex: 1, backgroundColor: Colors.WHITE, padding: 10 }}>
+        <KeyboardAvoidingView style={{ flex: 1, padding:10 }}  keyboardVerticalOffset={80} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
             <FlatList data={messages} renderItem={({ item, index }) => (
                 <View style={[styles.messageContainer, item.role === 'assistant' ? styles.assistantMessage : styles.userMessage]} >
                     <Text style={[styles.messageText, item.role === 'user' ? styles.userText : styles.assistantText]}>{item.content}</Text>
@@ -36,21 +58,47 @@ export default function ChatUI() {
             </FlatList>
 
             {/* Input area can be added here */}
-            <View style={styles.inputContainer}>
-                {/* Text area camera button  */}
-                <TouchableOpacity style={{ marginRight: 10 }}>
-                    <Camera size={27} />
+            <View style={{
+                flexDirection: "row",
+                alignItems: "center",
+                padding: 10,
+                borderTopWidth: 1,
+                borderColor: "#ddd",
+                backgroundColor: "white"
+            }}>
+                {/* Camera Button */}
+                <TouchableOpacity style={{ marginRight: 8 }}>
+                    <Camera size={26} color="#555" />
                 </TouchableOpacity>
 
-                {/* Text area input field  */}
-                <TextInput style={styles.input} placeholder='Type a message...' />
+                {/* Text Input */}
+                <TextInput
+                    style={{
+                        flex: 1,
+                        paddingHorizontal: 12,
+                        paddingVertical: 10,
+                        backgroundColor: "#f2f2f2",
+                        borderRadius: 20,
+                        fontSize: 16
+                    }}
+                    placeholder="Type a message..."
+                    placeholderTextColor="#888"
+                />
 
-                {/* Text area send button  */}
-                <TouchableOpacity style={{ backgroundColor: Colors.PRIMARY, padding: 7, borderRadius: 20 }}>
-                    <Send color={Colors.WHITE} size={20} />
+                {/* Send Button */}
+                <TouchableOpacity
+                    style={{
+                        backgroundColor: "#007bff",
+                        padding: 10,
+                        borderRadius: 20,
+                        marginLeft: 8
+                    }}
+                >
+                    <Send size={18} color="white" />
                 </TouchableOpacity>
             </View>
-        </View>
+
+        </KeyboardAvoidingView>
     )
 }
 
@@ -82,7 +130,7 @@ const styles = StyleSheet.create({
         padding: 10,
         borderWidth: 1,
         borderColor: '#CCC',
-        borderRadius:12
+        borderRadius: 12
     },
     input: {
         flex: 1,
