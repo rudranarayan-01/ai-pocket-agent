@@ -34,6 +34,8 @@ export default function ChatUI() {
             )}>
 
             </FlatList>
+
+            {/* Input area can be added here */}
         </View>
     )
 }
