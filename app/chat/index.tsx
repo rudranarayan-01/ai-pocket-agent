@@ -35,13 +35,12 @@ export default function ChatUI() {
     }
 
     return (
-        <KeyboardAvoidingView style={{ flex: 1, padding:10 }}  keyboardVerticalOffset={80} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+        <KeyboardAvoidingView style={{ flex: 1, padding:5,borderRadius:15 }}  keyboardVerticalOffset={80} behavior={Platform.OS === 'ios' ? 'padding' : "height"}>
             <FlatList data={messages} renderItem={({ item, index }) => (
                 <View style={[styles.messageContainer, item.role === 'assistant' ? styles.assistantMessage : styles.userMessage]} >
                     <Text style={[styles.messageText, item.role === 'user' ? styles.userText : styles.assistantText]}>{item.content}</Text>
                 </View>
             )}>
-
             </FlatList>
 
             {/* Input area can be added here */}
@@ -50,6 +49,7 @@ export default function ChatUI() {
                 alignItems: "center",
                 padding: 10,
                 borderTopWidth: 1,
+                borderRadius:25,
                 borderColor: "#ddd",
                 backgroundColor: "white"
             }}>
