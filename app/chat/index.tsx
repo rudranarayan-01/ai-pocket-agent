@@ -25,34 +25,47 @@ export default function ChatUI() {
                 <Plus />
             )
         })
-    })
+    }, []);
 
     useEffect(() => {
-        if(agentPrompt){
-            setMessages((prev)=>[...prev, {role: 'assistant', content: agentPrompt.toString()}]);
+        if (agentPrompt) {
+            setMessages((prev) => [...prev, { role: 'system', content: agentPrompt.toString() }]);
         }
     }, [agentPrompt])
 
-    const onSendMessage = async() => {
+    const onSendMessage = async () => {
         if (!input?.trim()) return;
 
-        const newMessage = { role: 'user', content: input};
-        setMessages((prev) => [...prev, newMessage]);
+        const newMessage = { role: 'user', content: input };
+        const updatedMessages = [...messages, newMessage];
+
+        setMessages(updatedMessages);
         setInput('');
 
-        const result = await AIChatModel([...messages, newMessage]);
-        console.log("AI Response:", result);
-    }
+        // API CALL
+        const result = await AIChatModel({ messages: updatedMessages });
+
+        console.log("AI Response:", result.aiResponse);
+
+        // Add AI reply in the correct format
+        setMessages(prev => [
+            ...prev,
+            { role: "assistant", content: result.aiResponse }
+        ]);
+    };
+
 
     return (
         <KeyboardAvoidingView style={{ flex: 1, padding: 5, borderRadius: 15 }} keyboardVerticalOffset={80} behavior={Platform.OS === 'ios' ? 'padding' : "height"}>
             {/* @ts-ignore */}
-            <FlatList data={messages} renderItem={({ item, index }) => item.role !=='system' && (
+            <FlatList data={messages} renderItem={({ item, index }) => item.role !== 'system' && (
                 <View style={[styles.messageContainer, item.role === 'assistant' ? styles.assistantMessage : styles.userMessage]} >
                     <Text style={[styles.messageText, item.role === 'user' ? styles.userText : styles.assistantText]}>{item.content}</Text>
                 </View>
             )}>
             </FlatList>
+
+
 
             {/* Input area can be added here */}
             <View style={{
