@@ -12,7 +12,7 @@ export const AIChatModel = async ({messages}:any) => {
         {
             headers: {
                 "Content-Type": "application/json",     // Tell server we're sending JSON
-                "Authorization": "Bearer YOUR_API_KEY"  // Replace with your API key
+                "Authorization": "Bearer YOUR_API_KEY"+process.env.EXPO_PUBLIC_KRAVIX_STUDIO_API  // Replace with your API key
             }
         }
     );

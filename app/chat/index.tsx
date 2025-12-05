@@ -1,18 +1,19 @@
 import Colors from '@/shred/Colors';
+import { AIChatModel } from '@/shred/GlobalAPI';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
 import { Camera, Plus, Send } from 'lucide-react-native';
 import React, { useEffect, useState } from 'react';
 import { FlatList, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
-const initialMessages = [
-    { role: 'user', content: 'Hello, who are you?' },
-    { role: 'assistant', content: 'I am good, what about you ?' },
-]
+type Messages = {
+    role: string;
+    content: string;
+};
 
 export default function ChatUI() {
     const navigation = useNavigation();
     const { agentName, agentPrompt, agentInitialText, agentId } = useLocalSearchParams();
-    const [messages, setMessages] = React.useState(initialMessages);
+    const [messages, setMessages] = useState<Messages[]>([]);
     const [input, setInput] = useState<string>();
 
     useEffect(() => {
@@ -26,17 +27,27 @@ export default function ChatUI() {
         })
     })
 
-    const onSendMessage = () => {
-        if(!input?.trim()) return;
+    useEffect(() => {
+        if(agentPrompt){
+            setMessages((prev)=>[...prev, {role: 'assistant', content: agentPrompt.toString()}]);
+        }
+    }, [agentPrompt])
 
-        const newMessage = { role: 'user', content: input.trim() };
-        setMessages([...messages, newMessage]);
+    const onSendMessage = async() => {
+        if (!input?.trim()) return;
+
+        const newMessage = { role: 'user', content: input};
+        setMessages((prev) => [...prev, newMessage]);
         setInput('');
+
+        const result = await AIChatModel([...messages, newMessage]);
+        console.log("AI Response:", result);
     }
 
     return (
-        <KeyboardAvoidingView style={{ flex: 1, padding:5,borderRadius:15 }}  keyboardVerticalOffset={80} behavior={Platform.OS === 'ios' ? 'padding' : "height"}>
-            <FlatList data={messages} renderItem={({ item, index }) => (
+        <KeyboardAvoidingView style={{ flex: 1, padding: 5, borderRadius: 15 }} keyboardVerticalOffset={80} behavior={Platform.OS === 'ios' ? 'padding' : "height"}>
+            {/* @ts-ignore */}
+            <FlatList data={messages} renderItem={({ item, index }) => item.role !=='system' && (
                 <View style={[styles.messageContainer, item.role === 'assistant' ? styles.assistantMessage : styles.userMessage]} >
                     <Text style={[styles.messageText, item.role === 'user' ? styles.userText : styles.assistantText]}>{item.content}</Text>
                 </View>
@@ -49,7 +60,7 @@ export default function ChatUI() {
                 alignItems: "center",
                 padding: 10,
                 borderTopWidth: 1,
-                borderRadius:25,
+                borderRadius: 25,
                 borderColor: "#ddd",
                 backgroundColor: "white"
             }}>
@@ -69,7 +80,7 @@ export default function ChatUI() {
                         fontSize: 16
                     }}
                     placeholder="Type a message..."
-                    onChange={(v)=>setInput(v.nativeEvent.text)}
+                    onChange={(v) => setInput(v.nativeEvent.text)}
                     value={input}
                     placeholderTextColor="#888"
                 />
