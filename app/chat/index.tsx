@@ -1,32 +1,10 @@
 import Colors from '@/shred/Colors';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
 import { Camera, Plus, Send } from 'lucide-react-native';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 const initialMessages = [
-    { role: 'user', content: 'Hello, who are you?' },
-    { role: 'assistant', content: 'I am good, what about you ?' },
-    { role: 'user', content: 'Hello, who are you?' },
-    { role: 'assistant', content: 'I am good, what about you ?' },
-    { role: 'user', content: 'Hello, who are you?' },
-    { role: 'assistant', content: 'I am good, what about you ?' },
-    { role: 'user', content: 'Hello, who are you?' },
-    { role: 'assistant', content: 'I am good, what about you ?' },
-    { role: 'user', content: 'Hello, who are you?' },
-    { role: 'assistant', content: 'I am good, what about you ?' },
-    { role: 'user', content: 'Hello, who are you?' },
-    { role: 'assistant', content: 'I am good, what about you ?' },
-    { role: 'user', content: 'Hello, who are you?' },
-    { role: 'assistant', content: 'I am good, what about you ?' },
-    { role: 'user', content: 'Hello, who are you?' },
-    { role: 'assistant', content: 'I am good, what about you ?' },
-    { role: 'user', content: 'Hello, who are you?' },
-    { role: 'assistant', content: 'I am good, what about you ?' },
-    { role: 'user', content: 'Hello, who are you?' },
-    { role: 'assistant', content: 'I am good, what about you ?' },
-    { role: 'user', content: 'Hello, who are you?' },
-    { role: 'assistant', content: 'I am good, what about you ?' },
     { role: 'user', content: 'Hello, who are you?' },
     { role: 'assistant', content: 'I am good, what about you ?' },
 ]
@@ -35,6 +13,7 @@ export default function ChatUI() {
     const navigation = useNavigation();
     const { agentName, agentPrompt, agentInitialText, agentId } = useLocalSearchParams();
     const [messages, setMessages] = React.useState(initialMessages);
+    const [input, setInput] = useState<string>();
 
     useEffect(() => {
         navigation.setOptions({
@@ -46,6 +25,14 @@ export default function ChatUI() {
             )
         })
     })
+
+    const onSendMessage = () => {
+        if(!input?.trim()) return;
+
+        const newMessage = { role: 'user', content: input.trim() };
+        setMessages([...messages, newMessage]);
+        setInput('');
+    }
 
     return (
         <KeyboardAvoidingView style={{ flex: 1, padding:10 }}  keyboardVerticalOffset={80} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
@@ -82,6 +69,8 @@ export default function ChatUI() {
                         fontSize: 16
                     }}
                     placeholder="Type a message..."
+                    onChange={(v)=>setInput(v.nativeEvent.text)}
+                    value={input}
                     placeholderTextColor="#888"
                 />
 
@@ -93,6 +82,7 @@ export default function ChatUI() {
                         borderRadius: 20,
                         marginLeft: 8
                     }}
+                    onPress={onSendMessage}
                 >
                     <Send size={18} color="white" />
                 </TouchableOpacity>
