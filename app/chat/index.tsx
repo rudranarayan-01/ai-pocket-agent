@@ -5,7 +5,7 @@ import { Camera, Plus, Send } from 'lucide-react-native';
 import React, { useEffect, useState } from 'react';
 import { FlatList, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
-type Messages = {
+type Message = {
     role: string;
     content: string;
 };
@@ -13,7 +13,7 @@ type Messages = {
 export default function ChatUI() {
     const navigation = useNavigation();
     const { agentName, agentPrompt, agentInitialText, agentId } = useLocalSearchParams();
-    const [messages, setMessages] = useState<Messages[]>([]);
+    const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState<string>();
 
     useEffect(() => {
