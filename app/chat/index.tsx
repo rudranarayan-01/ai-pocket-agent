@@ -165,6 +165,10 @@ export default function ChatUI() {
         ToastAndroid.show("Copied to clipboard", ToastAndroid.BOTTOM);
     };
 
+    const pickImage = () => {
+        
+    }
+
     return (
         <KeyboardAvoidingView
             style={{ flex: 1, padding: 5, borderRadius: 15 }}
