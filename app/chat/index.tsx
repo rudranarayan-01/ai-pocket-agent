@@ -1,10 +1,11 @@
 import Colors from '@/shred/Colors';
 import { AIChatModel } from '@/shred/GlobalAPI';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
-import { Camera, Copy, Plus, Send } from 'lucide-react-native';
+import { Camera, Copy, Plus, Send, X } from 'lucide-react-native';
 import React, { useEffect, useState } from 'react';
 import {
     FlatList,
+    Image,
     KeyboardAvoidingView,
     Platform,
     Pressable,
@@ -18,6 +19,7 @@ import {
 
 
 import * as Clipboard from 'expo-clipboard';
+import * as ImagePicker from 'expo-image-picker';
 
 type Message = {
     role: string;
@@ -35,6 +37,7 @@ export default function ChatUI() {
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState<string>(''); // initialize as empty string
     const [loading, setLoading] = useState(false);
+    const [file, setFile] = useState<string>();
 
     useEffect(() => {
         navigation.setOptions({
@@ -159,14 +162,22 @@ export default function ChatUI() {
     };
 
 
-    const copyToClipboard = async(text: string) => {
+    const copyToClipboard = async (text: string) => {
         await Clipboard.setStringAsync(text);
         // alert('Copied to clipboard');
         ToastAndroid.show("Copied to clipboard", ToastAndroid.BOTTOM);
     };
 
-    const pickImage = () => {
-        
+    const pickImage = async () => {
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ['images'],
+            allowsEditing: false,
+            quality: 0.5,
+        });
+
+        if (!result.canceled) {
+            setFile(result.assets[0].uri);
+        }
     }
 
     return (
@@ -183,8 +194,8 @@ export default function ChatUI() {
                             {item.content}
                         </Text>
                         {item.role === 'assistant' && (
-                            <Pressable onPress={()=>copyToClipboard(item.content)}>
-                                <Copy color={Colors.GRAY} size={16} style={{marginTop:1}} />
+                            <Pressable onPress={() => copyToClipboard(item.content)}>
+                                <Copy color={Colors.GRAY} size={16} style={{ marginTop: 1 }} />
                             </Pressable>
                         )}
                     </View>
@@ -193,51 +204,61 @@ export default function ChatUI() {
                 ListEmptyComponent={<Text style={{ textAlign: 'center', padding: 20 }}>No messages yet</Text>}
             />
 
-            {/* Input area */}
-            <View
-                style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    padding: 10,
-                    borderTopWidth: 1,
-                    borderRadius: 25,
-                    borderColor: '#ddd',
-                    backgroundColor: 'white'
-                }}
-            >
-                <TouchableOpacity style={{ marginRight: 8 }}>
-                    <Camera size={26} color="#555" />
-                </TouchableOpacity>
-
-                <TextInput
+            <View>
+                {/* Input area */}
+                {file && (
+                    <View style={{marginBottom:10, display:"flex", flexDirection:'row'}}>
+                        <Image source={{uri:file}} style={{width:50, height:50, borderRadius:6}} />
+                        <TouchableOpacity>
+                            <X size={20} onPress={() => setFile(undefined)} />
+                        </TouchableOpacity>
+                    </View>
+                )}
+                <View
                     style={{
-                        flex: 1,
-                        paddingHorizontal: 12,
-                        paddingVertical: 10,
-                        backgroundColor: '#f2f2f2',
-                        borderRadius: 20,
-                        fontSize: 16
-                    }}
-                    placeholder="Type a message..."
-                    onChangeText={(text) => setInput(text)}
-                    value={input}
-                    placeholderTextColor="#888"
-                    editable={!loading}
-                />
-
-                <TouchableOpacity
-                    style={{
-                        backgroundColor: '#007bff',
+                        flexDirection: 'row',
+                        alignItems: 'center',
                         padding: 10,
-                        borderRadius: 20,
-                        marginLeft: 8,
-                        opacity: loading ? 0.6 : 1
+                        borderTopWidth: 1,
+                        borderRadius: 25,
+                        borderColor: '#ddd',
+                        backgroundColor: 'white'
                     }}
-                    onPress={onSendMessage}
-                    disabled={loading}
                 >
-                    <Send size={18} color="white" />
-                </TouchableOpacity>
+                    <TouchableOpacity onPress={pickImage} style={{ marginRight: 8 }}>
+                        <Camera size={26} color="#555" />
+                    </TouchableOpacity>
+
+                    <TextInput
+                        style={{
+                            flex: 1,
+                            paddingHorizontal: 12,
+                            paddingVertical: 10,
+                            backgroundColor: '#f2f2f2',
+                            borderRadius: 20,
+                            fontSize: 16
+                        }}
+                        placeholder="Type a message..."
+                        onChangeText={(text) => setInput(text)}
+                        value={input}
+                        placeholderTextColor="#888"
+                        editable={!loading}
+                    />
+
+                    <TouchableOpacity
+                        style={{
+                            backgroundColor: '#007bff',
+                            padding: 10,
+                            borderRadius: 20,
+                            marginLeft: 8,
+                            opacity: loading ? 0.6 : 1
+                        }}
+                        onPress={onSendMessage}
+                        disabled={loading}
+                    >
+                        <Send size={18} color="white" />
+                    </TouchableOpacity>
+                </View>
             </View>
         </KeyboardAvoidingView>
     );
