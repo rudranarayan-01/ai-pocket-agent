@@ -161,8 +161,8 @@ export default function ChatUI() {
 
     const copyToClipboard = async(text: string) => {
         await Clipboard.setStringAsync(text);
-        alert('Copied to clipboard');
-        ToastAndroid.show("Copied to clipboard", ToastAndroid.SHORT);
+        // alert('Copied to clipboard');
+        ToastAndroid.show("Copied to clipboard", ToastAndroid.BOTTOM);
     };
 
     return (
