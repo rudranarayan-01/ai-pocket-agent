@@ -1,18 +1,23 @@
 import Colors from '@/shred/Colors';
 import { AIChatModel } from '@/shred/GlobalAPI';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
-import { Camera, Plus, Send } from 'lucide-react-native';
+import { Camera, Copy, Plus, Send } from 'lucide-react-native';
 import React, { useEffect, useState } from 'react';
 import {
     FlatList,
     KeyboardAvoidingView,
     Platform,
+    Pressable,
     StyleSheet,
     Text,
     TextInput,
+    ToastAndroid,
     TouchableOpacity,
     View
 } from 'react-native';
+
+
+import * as Clipboard from 'expo-clipboard';
 
 type Message = {
     role: string;
@@ -153,6 +158,13 @@ export default function ChatUI() {
         }
     };
 
+
+    const copyToClipboard = async(text: string) => {
+        await Clipboard.setStringAsync(text);
+        alert('Copied to clipboard');
+        ToastAndroid.show("Copied to clipboard", ToastAndroid.SHORT);
+    };
+
     return (
         <KeyboardAvoidingView
             style={{ flex: 1, padding: 5, borderRadius: 15 }}
@@ -166,6 +178,11 @@ export default function ChatUI() {
                         <Text style={[styles.messageText, item.role === 'user' ? styles.userText : styles.assistantText]}>
                             {item.content}
                         </Text>
+                        {item.role === 'assistant' && (
+                            <Pressable onPress={()=>copyToClipboard(item.content)}>
+                                <Copy color={Colors.GRAY} size={16} style={{marginTop:1}} />
+                            </Pressable>
+                        )}
                     </View>
                 )}
                 keyExtractor={(_, index) => index.toString()}
