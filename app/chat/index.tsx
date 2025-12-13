@@ -25,7 +25,7 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 type Message = {
     role: string;
-    content: string;
+    content: string | any[];
 };
 
 // Type guard for ApiFailure - adapt field names to match your GlobalAPI types
@@ -109,12 +109,29 @@ export default function ChatUI() {
         const trimmed = input?.trim();
         if (!trimmed) return;
 
+
+        let userMessage:Message;
         if(file){
             // Upload file to Firebase Storage and get URL
+            const imageURL = await UploadImageToStorage();
+            console.log('Image URL:', imageURL);
+            userMessage = {
+                role: 'user',
+                content : [
+                    { type: 'text', text: trimmed },
+                    { type: 'image', url: imageURL}
+                ]
+            }
+            setInput('');
+            setFile(undefined);
+        }else{
+            userMessage = { role: 'user', content: trimmed };
+            setInput('');
         }
 
+
         // Build user message and capture latest messages
-        const userMessage: Message = { role: 'user', content: trimmed };
+        userMessage = { role: 'user', content: trimmed };
 
         let latestMessages: Message[] = [];
         setMessages((prev) => {
@@ -211,7 +228,7 @@ export default function ChatUI() {
                             {item.content}
                         </Text>
                         {item.role === 'assistant' && (
-                            <Pressable onPress={() => copyToClipboard(item.content)}>
+                            <Pressable onPress={() => copyToClipboard(item?.content.toString())}>
                                 <Copy color={Colors.GRAY} size={16} style={{ marginTop: 1 }} />
                             </Pressable>
                         )}
