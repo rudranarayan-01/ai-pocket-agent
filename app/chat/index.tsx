@@ -264,6 +264,10 @@ export default function ChatUI() {
     );
 }
 
+
+
+// Stylesheet 
+
 const styles = StyleSheet.create({
     messageContainer: {
         maxWidth: '75%',
