@@ -21,7 +21,7 @@ import {
 import { storage } from '@/config/firebase';
 import * as Clipboard from 'expo-clipboard';
 import * as ImagePicker from 'expo-image-picker';
-import { ref, uploadBytes } from 'firebase/storage';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 type Message = {
     role: string;
@@ -173,6 +173,9 @@ export default function ChatUI() {
         uploadBytes(imageRef,file).then((snapshot) => {
             console.log('Uploaded a blob or file!');
         });
+        const imageURL = await getDownloadURL(imageRef);
+        console.log('File available at', imageURL);
+        return imageURL;
     }
 
 
