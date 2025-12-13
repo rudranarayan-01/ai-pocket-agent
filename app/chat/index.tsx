@@ -18,8 +18,10 @@ import {
 } from 'react-native';
 
 
+import { storage } from '@/config/firebase';
 import * as Clipboard from 'expo-clipboard';
 import * as ImagePicker from 'expo-image-picker';
+import { ref, uploadBytes } from 'firebase/storage';
 
 type Message = {
     role: string;
@@ -107,6 +109,10 @@ export default function ChatUI() {
         const trimmed = input?.trim();
         if (!trimmed) return;
 
+        if(file){
+            // Upload file to Firebase Storage and get URL
+        }
+
         // Build user message and capture latest messages
         const userMessage: Message = { role: 'user', content: trimmed };
 
@@ -160,6 +166,14 @@ export default function ChatUI() {
             setLoading(false);
         }
     };
+
+    const UploadImageToStorage = async() =>{
+        const imageRef = ref(storage, `images/${Date.now()}.jpg`);
+        //@ts-ignore
+        uploadBytes(imageRef,file).then((snapshot) => {
+            console.log('Uploaded a blob or file!');
+        });
+    }
 
 
     const copyToClipboard = async (text: string) => {
