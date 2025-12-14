@@ -25,8 +25,9 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 type Message = {
     role: string;
-    content: string | any[];
+    content: string;
 };
+
 
 // Type guard for ApiFailure - adapt field names to match your GlobalAPI types
 function isApiFailure(obj: any): obj is { ok: false; bodyText?: string; bodyJson?: any; error?: string } {
@@ -106,88 +107,70 @@ export default function ChatUI() {
     };
 
     const onSendMessage = async () => {
-        const trimmed = input?.trim();
+        const trimmed = input.trim();
         if (!trimmed) return;
 
+        let contentText = trimmed;
 
-        let userMessage:Message;
-        if(file){
-            // Upload file to Firebase Storage and get URL
+        if (file) {
             const imageURL = await UploadImageToStorage();
-            console.log('Image URL:', imageURL);
-            userMessage = {
-                role: 'user',
-                content : [
-                    { type: 'text', text: trimmed },
-                    { type: 'image', url: imageURL}
-                ]
-            }
-            setInput('');
+            contentText = `${trimmed}\n[Image URL]: ${imageURL}`;
             setFile(undefined);
-        }else{
-            userMessage = { role: 'user', content: trimmed };
-            setInput('');
         }
 
+        const userMessage: Message = {
+            role: "user",
+            content: contentText,
+        };
 
-        // Build user message and capture latest messages
-        userMessage = { role: 'user', content: trimmed };
-
-        let latestMessages: Message[] = [];
-        setMessages((prev) => {
-            latestMessages = [...prev, userMessage];
-            return latestMessages;
-        });
-
-        setInput('');
+        setMessages((prev) => [...prev, userMessage]);
+        setInput("");
         setLoading(true);
 
         try {
-            const systemMsg = agentPrompt ? { role: 'system', content: agentPrompt.toString() } : null;
+            const systemMsg = agentPrompt
+                ? { role: "system", content: agentPrompt.toString() }
+                : null;
+
             const payloadMessages = [
                 ...(systemMsg ? [systemMsg] : []),
-                ...latestMessages.filter(m => !(m.role === 'system' && systemMsg != null))
+                ...messages.filter(m => m.role !== "system"),
+                userMessage,
             ];
-
-            // console.log('[ChatUI] Sending payload messages:', payloadMessages);
 
             const result = await AIChatModel({ messages: payloadMessages });
 
-            console.log('[ChatUI] AI result raw:', result);
-
-            // If the result signals failure (ApiFailure), narrow the type and extract error safely
-            if (!result || isApiFailure(result)) {
-                console.warn('AI call failed:', result);
-                const serverMsg =
-                    (isApiFailure(result) && (result.bodyJson?.error || result.bodyJson?.message || result.bodyText)) ||
-                    (isApiFailure(result) && result.error) ||
-                    'Unknown error';
-
-                setMessages((prev) => [
-                    ...prev,
-                    { role: 'assistant', content: `Sorry, something went wrong: ${String(serverMsg)}` },
-                ]);
-                setLoading(false);
-                return;
+            if (!result || !result.ok) {
+                throw new Error("API failed");
             }
 
-            // At this point TypeScript knows `result` is the success branch (but still `any`-safe)
-            const aiText = extractAiText(result) ?? extractAiText(result.data) ?? 'No response';
+            const aiText =
+                result.data?.aiResponse ??
+                result.data?.text ??
+                result.data?.message ??
+                "No response";
 
-            setMessages((prev) => [...prev, { role: 'assistant', content: aiText }]);
-            console.log('AI Response (appended):', aiText);
-        } catch (error) {
-            console.error('AI call exception:', error);
-            setMessages((prev) => [...prev, { role: 'assistant', content: 'Sorry, something went wrong. Please try again.' }]);
+            setMessages((prev) => [
+                ...prev,
+                { role: "assistant", content: aiText },
+            ]);
+        } catch (err) {
+            console.error(err);
+            setMessages((prev) => [
+                ...prev,
+                { role: "assistant", content: "Sorry, something went wrong." },
+            ]);
         } finally {
             setLoading(false);
         }
     };
 
-    const UploadImageToStorage = async() =>{
+
+
+    const UploadImageToStorage = async () => {
         const imageRef = ref(storage, `images/${Date.now()}.jpg`);
         //@ts-ignore
-        uploadBytes(imageRef,file).then((snapshot) => {
+        uploadBytes(imageRef, file).then((snapshot) => {
             console.log('Uploaded a blob or file!');
         });
         const imageURL = await getDownloadURL(imageRef);
@@ -241,8 +224,8 @@ export default function ChatUI() {
             <View>
                 {/* Input area */}
                 {file && (
-                    <View style={{marginBottom:10, display:"flex", flexDirection:'row'}}>
-                        <Image source={{uri:file}} style={{width:50, height:50, borderRadius:6}} />
+                    <View style={{ marginBottom: 10, display: "flex", flexDirection: 'row' }}>
+                        <Image source={{ uri: file }} style={{ width: 50, height: 50, borderRadius: 6 }} />
                         <TouchableOpacity>
                             <X size={20} onPress={() => setFile(undefined)} />
                         </TouchableOpacity>
