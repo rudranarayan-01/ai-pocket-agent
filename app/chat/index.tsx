@@ -4,6 +4,7 @@ import { useLocalSearchParams, useNavigation } from 'expo-router';
 import { Camera, Copy, Plus, Send, X } from 'lucide-react-native';
 import React, { useEffect, useState } from 'react';
 import {
+    ActivityIndicator,
     FlatList,
     Image,
     KeyboardAvoidingView,
@@ -25,7 +26,7 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 type Message = {
     role: string;
-    content: string;
+    content: string | any[];
 };
 
 
@@ -207,14 +208,33 @@ export default function ChatUI() {
                 data={messages.filter(msg => msg.role !== 'system' && msg.content)}
                 renderItem={({ item }) => (
                     <View style={[styles.messageContainer, item.role === 'assistant' ? styles.assistantMessage : styles.userMessage]}>
-                        <Text style={[styles.messageText, item.role === 'user' ? styles.userText : styles.assistantText]}>
-                            {item.content}
-                        </Text>
+
+                        {typeof item.content == "string" ? (item.content == '__loading__' ?
+                            <ActivityIndicator size="small" color={item.role === 'user' ? Colors.WHITE : Colors.GRAY} /> :
+
+                            <Text style={[styles.messageText, item.role === 'user' ? styles.userText : styles.assistantText]}>
+                                {item.content}
+                            </Text>
+                        ) :
+                            <>
+                                {item.content.find((c: any) => c.type === 'image') && (
+                                    <Text style={[styles.messageText, item.role === 'user' ? styles.userText : styles.assistantText]}>{item.content.find((c) => c.type == 'text').text}</Text>
+                                )}
+                                {item.content.find((c: any) => c.type === 'image_url') && (
+                                    <Image source={{ uri: item.content.find((c: any) => c.type == "image_url").image_url?.uri }} style={{ width: 180, height: 180, borderRadius: 8, marginTop: 6 }} />
+                                )}
+                            </>
+                        }
+
+
+
                         {item.role === 'assistant' && (
                             <Pressable onPress={() => copyToClipboard(item?.content.toString())}>
                                 <Copy color={Colors.GRAY} size={16} style={{ marginTop: 1 }} />
                             </Pressable>
                         )}
+
+
                     </View>
                 )}
                 keyExtractor={(_, index) => index.toString()}
