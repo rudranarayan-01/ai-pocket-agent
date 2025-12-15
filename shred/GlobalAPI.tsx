@@ -57,7 +57,7 @@ export async function AIChatModel({ messages }: { messages: Message[] }): Promis
     const payload = {
         // Kravix accepted `message: [{role,content}]` when you tested successfully.
         message: normalized,
-        aiModel: "gpt-4.1-mini", // keep the working model you tested; change if required
+        aiModel: "gpt-5", // keep the working model you tested; change if required
         outputType: "text",
     };
 
