@@ -139,7 +139,14 @@ export default function ChatUI() {
                 userMessage,
             ];
 
-            const result = await AIChatModel({ messages: payloadMessages });
+            const apiMessages = payloadMessages.map(m => ({
+                role: m.role,
+                content: typeof m.content === "string"
+                    ? m.content
+                    : m.content.find((c: any) => c.type === "text")?.text || ""
+            }));
+
+            const result = await AIChatModel({ messages: apiMessages });
 
             if (!result || !result.ok) {
                 throw new Error("API failed");
@@ -169,15 +176,19 @@ export default function ChatUI() {
 
 
     const UploadImageToStorage = async () => {
+        if (!file) throw new Error("No file selected");
+
+        const response = await fetch(file);
+        const blob = await response.blob();
+
         const imageRef = ref(storage, `images/${Date.now()}.jpg`);
-        //@ts-ignore
-        uploadBytes(imageRef, file).then((snapshot) => {
-            console.log('Uploaded a blob or file!');
-        });
+
+        await uploadBytes(imageRef, blob);
+
         const imageURL = await getDownloadURL(imageRef);
-        console.log('File available at', imageURL);
         return imageURL;
-    }
+    };
+
 
 
     const copyToClipboard = async (text: string) => {
